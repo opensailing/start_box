@@ -58,6 +58,7 @@ defmodule StartBox.Racer do
   end
 
   def handle_info(:run, []), do: {:noreply, []}
+
   def handle_info(:run, [{command, data, wait} | script]) do
     handle_step(command, data)
     Process.send_after(self(), :run, wait)
@@ -67,12 +68,15 @@ defmodule StartBox.Racer do
   def handle_step(:alert, signals) do
     StartBox.Signal.run(signals)
   end
+
   def handle_step(:print, message) do
     send(StartBox.Printer, {:message, message})
   end
+
   def handle_step(:countdown, seconds) do
     send(StartBox.Timer, {:start, seconds})
   end
+
   def handle_step(:signal, signals) do
     StartBox.Signal.run(signals)
   end

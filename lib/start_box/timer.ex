@@ -17,6 +17,7 @@ defmodule StartBox.Timer do
   end
 
   def handle_info(:run, state) when state in [nil, -1], do: {:noreply, nil}
+
   def handle_info(:run, seconds) do
     print_time(seconds)
     Process.send_after(self(), :run, 1_000)

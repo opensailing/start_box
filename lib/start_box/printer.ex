@@ -1,6 +1,8 @@
 defmodule StartBox.Printer do
   use GenServer
 
+  require Logger
+
   def start_link(opts) do
     GenServer.start_link(__MODULE__, :ok, opts)
   end
@@ -10,7 +12,17 @@ defmodule StartBox.Printer do
   end
 
   def handle_info({:message, message}, state) do
-    IO.puts(message)
+    print_message(message)
     {:noreply, state}
+  end
+
+  defp print_message(message) when is_binary(message) do
+    Logger.info(message)
+  end
+
+  defp print_message(message) do
+    message
+    |> inspect()
+    |> print_message()
   end
 end

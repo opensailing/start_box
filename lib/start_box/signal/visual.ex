@@ -8,6 +8,7 @@ defmodule StartBox.Signal.Visual do
   def init(:ok) do
     {:ok, []}
   end
+
   def handle_info(:cancel, _state), do: {:noreply, []}
 
   def handle_info({:run, signals}, _state) do
