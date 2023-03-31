@@ -12,15 +12,19 @@ defmodule StartBox.Timer do
   def handle_info(:cancel, _start), do: {:noreply, -1}
 
   def handle_info({:start, seconds}, _state) do
-    send(self(), :run)
+    IO.puts("++ timer start ++")
+    send(self(), :tick)
     {:noreply, seconds}
   end
 
-  def handle_info(:run, state) when state in [nil, -1], do: {:noreply, nil}
+  def handle_info(:tick, state) when state in [nil, -1] do
+    IO.puts("-- timer end --")
+    {:noreply, nil}
+  end
 
-  def handle_info(:run, seconds) do
+  def handle_info(:tick, seconds) do
     print_time(seconds)
-    Process.send_after(self(), :run, 1_000)
+    Process.send_after(self(), :tick, 1_000)
     {:noreply, seconds - 1}
   end
 

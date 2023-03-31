@@ -26,16 +26,10 @@ defmodule StartBox.Button do
   def handle_info(:reset, {_state, button_pid}), do: {:noreply, {:prestart, button_pid}}
 
   def handle_info({:circuits_gpio, 17, _, 1}, state) do
-    send(self(), :press)
+    StartBox.press_button()
 
     {:noreply, state}
   end
 
-  def handle_info({:circuits_gpio, 17, _, 0}, state) do
-    Logger.info("17 - 0")
-
-    {:noreply, state}
-  end
-
-  def handle_info({:circuits_gpio, 27, _, _}, state), do: {:noreply, state}
+  def handle_info({:circuits_gpio, _, _, _}, state), do: {:noreply, state}
 end
