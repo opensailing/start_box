@@ -39,6 +39,7 @@ defmodule StartBox.MixProject do
       {:nerves_runtime, "~> 0.13.0", targets: @all_targets},
       {:nerves_pack, "~> 0.7.0", targets: @all_targets},
       {:ssh_subsystem_fwup, "~> 0.6"},
+      {:oled, path: "../oled"},
 
       # Dependencies for specific targets
       # NOTE: It's generally low risk and recommended to follow minor version
@@ -47,7 +48,7 @@ defmodule StartBox.MixProject do
       # changes to your application are needed.
       # {:nerves_system_rpi, "~> 1.19", runtime: false, targets: :rpi},
       {:nerves_system_rpi0, "~> 1.19", runtime: false, targets: :rpi0},
-      # {:nerves_system_rpi2, "~> 1.19", runtime: false, targets: :rpi2},
+      {:nerves_system_rpi2, "~> 1.19", runtime: false, targets: :rpi2},
       # {:nerves_system_rpi3, "~> 1.19", runtime: false, targets: :rpi3},
       # {:nerves_system_rpi3a, "~> 1.19", runtime: false, targets: :rpi3a},
       # {:nerves_system_rpi4, "~> 1.19", runtime: false, targets: :rpi4},

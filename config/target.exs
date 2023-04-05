@@ -100,6 +100,14 @@ config :mdns_lite,
     }
   ]
 
+config :start_box, StartBox.Display,
+  device: "i2c-1",
+  driver: :ssd1306,
+  type: :i2c,
+  width: 128,
+  height: 64,
+  address: 0x3C
+
 # Import target specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 # Uncomment to use target specific configurations

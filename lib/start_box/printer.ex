@@ -16,12 +16,12 @@ defmodule StartBox.Printer do
     {:noreply, state}
   end
 
-  defp print_message(message, :target) when is_binary(message) do
-    Logger.info(message)
-  end
-
   defp print_message(message, :host) when is_binary(message) do
     IO.puts(message)
+  end
+
+  defp print_message(message, _target) when is_binary(message) do
+    Logger.info(message)
   end
 
   defp print_message(message, target) do

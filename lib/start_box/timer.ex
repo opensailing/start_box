@@ -6,27 +6,27 @@ defmodule StartBox.Timer do
   end
 
   def init(:ok) do
-    {:ok, nil}
+    {:ok, {nil, nil}}
   end
 
-  def handle_info(:cancel, _start), do: {:noreply, -1}
+  def handle_info(:cancel, {_start, timer_ref}), do: {:noreply, {-1, timer_ref}}
 
-  def handle_info({:start, seconds}, _state) do
-    IO.puts("++ timer start ++")
+  def handle_info({:start, seconds}, {_seconds, timer_ref}) do
+    cancel_timer(timer_ref)
     send(self(), :tick)
-    {:noreply, seconds}
+    {:noreply, {seconds, nil}}
   end
 
-  def handle_info(:tick, state) when state in [nil, -1] do
-    IO.puts("-- timer end --")
-    {:noreply, nil}
-  end
+  def handle_info(:tick, {state, timer_ref}) when state in [nil, -1], do: {:noreply, {nil, timer_ref}}
 
-  def handle_info(:tick, seconds) do
+  def handle_info(:tick, {seconds, _timer_ref}) do
     print_time(seconds)
-    Process.send_after(self(), :tick, 1_000)
-    {:noreply, seconds - 1}
+    timer_ref = Process.send_after(self(), :tick, 1_000)
+    {:noreply, {seconds - 1, timer_ref}}
   end
+
+  def cancel_timer(nil), do: nil
+  def cancel_timer(timer_ref), do: Process.cancel_timer(timer_ref)
 
   defp print_time(seconds) do
     minutes =

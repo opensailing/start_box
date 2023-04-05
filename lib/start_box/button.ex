@@ -1,6 +1,6 @@
 defmodule StartBox.Button do
   use GenServer
-  require Logger
+  require StartBox
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, :ok, opts)

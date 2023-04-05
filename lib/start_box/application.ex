@@ -9,7 +9,12 @@ defmodule StartBox.Application do
       {StartBox.Timer, name: StartBox.Timer},
       {StartBox.Signal.Sound, name: StartBox.Signal.Sound},
       {StartBox.Signal.Visual, name: StartBox.Signal.Visual},
-      {StartBox.Racer, name: StartBox.Racer}
+      {StartBox.Racer, name: StartBox.Racer},
+
+      # this should be the final step to init
+      # as we want the light turning on as an indicator
+      # that the box is ready to use
+      {StartBox.ButtonLight, name: StartBox.ButtonLight}
     ]
 
     opts = [strategy: :one_for_all, name: StartBox.Supervisor]
