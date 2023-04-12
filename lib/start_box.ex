@@ -2,6 +2,7 @@ defmodule StartBox do
   @codes %{
     3 => :"3_minute"
   }
+
   def race(code) do
     send(StartBox.Racer, {:race, lookup(code)})
   end

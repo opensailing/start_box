@@ -13,12 +13,17 @@ defmodule StartBox.Racer do
   end
 
   def init(:ok) do
-    {:ok, []}
+    {:ok, {[], nil}}
   end
 
-  def handle_info(:cancel, _state), do: {:noreply, []}
+  def handle_info(:cancel, {_, timer_ref}) do
+    cancel_timer(timer_ref)
+    {:noreply, {[], nil}}
+  end
 
-  def handle_info({:race, :"3_minute"}, _state) do
+  def handle_info({:race, :"3_minute"}, {_, timer_ref}) do
+    cancel_timer(timer_ref)
+
     script = [
       # {:print, "03:00", 0},
       {:countdown, 15, 0},
@@ -54,15 +59,16 @@ defmodule StartBox.Racer do
 
     send(self(), :run)
 
-    {:noreply, script}
+    {:noreply, {script, nil}}
   end
 
-  def handle_info(:run, []), do: {:noreply, []}
+  def handle_info(:run, {[], timer_ref}), do: {:noreply, {[], timer_ref}}
 
-  def handle_info(:run, [{command, data, wait} | script]) do
+  def handle_info(:run, {[{command, data, wait} | script], timer_ref}) do
+    cancel_timer(timer_ref)
     handle_step(command, data)
-    Process.send_after(self(), :run, wait)
-    {:noreply, script}
+    timer_ref = Process.send_after(self(), :run, wait)
+    {:noreply, {script, timer_ref}}
   end
 
   def handle_step(:alert, signals) do
@@ -80,4 +86,7 @@ defmodule StartBox.Racer do
   def handle_step(:signal, signals) do
     StartBox.Signal.run(signals)
   end
+
+  defp cancel_timer(nil), do: nil
+  defp cancel_timer(timer_ref), do: Process.cancel_timer(timer_ref)
 end

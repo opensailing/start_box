@@ -9,7 +9,10 @@ defmodule StartBox.Timer do
     {:ok, {nil, nil}}
   end
 
-  def handle_info(:cancel, {_start, timer_ref}), do: {:noreply, {-1, timer_ref}}
+  def handle_info(:cancel, {_start, timer_ref}) do
+    cancel_timer(timer_ref)
+    {:noreply, {-1, nil}}
+  end
 
   def handle_info({:start, seconds}, {_seconds, timer_ref}) do
     cancel_timer(timer_ref)
